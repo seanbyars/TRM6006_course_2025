@@ -1,1 +1,3 @@
-
+- This is the R Markdown code (TRM tutorial 1.Rmd) and the html from the first tutorial
+- The R Markdown code can be viewed here in github
+- If you want to view the html from today's tutorial, you can download the .html file and view locally on your laptop or online ...
