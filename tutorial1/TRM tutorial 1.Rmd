@@ -249,26 +249,6 @@ head(iris)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### dataframes in R
 
 #### dataframes in R    
@@ -408,23 +388,6 @@ gap_geo
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### plotting in R
 
 #### plotting in R and with ggplot2    
@@ -498,20 +461,6 @@ ggplot(gap_geo, aes(x=year, y=life_exp)) +
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### summarising data
 
 #### summarising data   
@@ -527,18 +476,6 @@ ggplot(gap_geo, aes(x=year, y=life_exp)) +
   - 4.4 t-test
     - as well as t-test, most other standard statistical tests (e.g. anova, regresion analysis) have an in-built function in R
     
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -618,74 +555,6 @@ km_AG_fit <- survfit(Surv(time, status) ~ AG, data=vet)
 autoplot(km_AG_fit)
 ```
   
-
-
-  
-```{r GDC_workthrough_lastyear, eval=FALSE, include=FALSE}
-
-# Have included this here for reference
-# this was the manual GDC work through from last year, however the website/portal has changed - can no longer access the bcr biotab data
-# rather it now downloads all datasets for the selected cohort
-
-#### 2.1 setting up for a survival analysis - last year
-- Repository
-  - -> Data format - bcr biotab - 470 of 838 cases available, 16 files available
-
-# nationwidechildrens.org_clinical_patient_skcm.txt # this is the file to download	
-IN=read.table("~/Dropbox/2_CCS/5_teaching/2_project files 2 (DATED)/240326_MAIN_to_file/teaching/assignment 1 p1 code + walk through/nationwidechildrens.org_clinical_patient_skcm.txt",sep="\t",head=TRUE)
-IN=IN[,c("bcr_patient_uuid","vital_status","last_contact_days_to","death_days_to","gender","height_cm_at_diagnosis","weight_kg_at_diagnosis","race")]
-IN=IN[3:nrow(IN),] # remove first two rows
-
-# now need to recode data for survival analysis
-
-# create new time variable, which is a merge between death_days_to and last_contact_days_to
-IN$time=IN$death_days_to
-IN$time[c(which(IN$time == "[Not Applicable]"))]=IN$last_contact_days_to[c(which(IN$time == "[Not Applicable]"))]
-
-# create new binary status variable
-IN$status=as.numeric(IN$vital_status == "Dead")
-
-# remove missing data
-IN=IN[c(which(IN$time != "[Completed]")),]
-IN=IN[c(which(IN$time != "[Not Available]")),]
-
-# make sure time variable is numeric
-IN$time=as.numeric(IN$time)
-
-# also need to convert patient Id's to lower case, to match the lower case of the patient Id's when using the 'export cohort' function for specific mutations
-IN$bcr_patient_uuid=tolower(IN$bcr_patient_uuid)
-
-# Now need to add in the mutation status data
-# Analysis Centre - mutation frequency - mutations - RAC1 P29S - Id's of individuals with this mutation obtained with the 'export cohort' function when cross-referencing with your chosen cohort
-RAC1=read.table("~/Dropbox/2_CCS/5_teaching/2_project files 2 (DATED)/240326_MAIN_to_file/teaching/assignment 1 p1 code + walk through/RAC1.tsv",head=TRUE)
-RAC1$RAC1m=1
-names(RAC1)[1]="bcr_patient_uuid"
-
-IN=merge(IN, RAC1,by="bcr_patient_uuid",all=TRUE)
-IN$RAC1m[c(which(is.na(IN$RAC1m)))]=0
-
-library(ggsurvfit)
-#dev.new(height=4, width=4)
-survfit2(Surv(time, status) ~ RAC1m, data = IN) %>% 
-  ggsurvfit() +
-  labs(
-    x = "Days",
-    y = "Overall survival probability"
-  )
-  
-survfit2(Surv(time, status) ~ as.factor(gender), data = IN) %>% 
-  ggsurvfit() +
-  labs(
-    x = "Days",
-    y = "Overall survival probability"
-  )
-
-# switching to coxph for multivariable model
-cox <- coxph(Surv(time, status) ~ RAC1m, data = IN); summary(cox)
-cox <- coxph(Surv(time, status) ~ RAC1m + as.factor(gender), data = IN); summary(cox)
-
-```
-
 <br>
 <br>
 
@@ -837,19 +706,10 @@ survfit2(Surv(time, status) ~ mutant, data = M2) %>%
 
 ```
   
-
-
-
-
-
 <br>
 <br>
 
 
-
-
-
-  
 
 
 #### 3. GDC - using R packages to interface and extract data for survival analysis in R   
@@ -1238,10 +1098,9 @@ cox <- coxph(Surv(time, status) ~ TP53 + as.factor(gender), data = INm); summary
   
 
 - follow-up notes
-  - When you choose a gene in the GDC Portal, this includes any mutation related to that gene. You can look at the effect of specific mutations on survival if there is enough data. This is mainly related to whether there are a sufficient number of individuals with that mutation in both outcomes (died, alive, other factors if included)
+  - When you choose a gene in the GDC Portal, this includes any mutation related to that gene. 
+  - You can look at the effect of specific mutations on survival if there is enough data. 
+  - This is mainly related to whether there are a sufficient number of individuals with that mutation in both outcomes (died, alive, other factors if included)
 
-```{r, eval=FALSE, include=FALSE}
-
-```
 
 
