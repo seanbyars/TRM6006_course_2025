@@ -1,0 +1,1247 @@
+---
+title: "TRM tutorial #1"
+author: "Sean Byars"
+date: "2025-03-19"
+output:
+  html_document:
+    code_folding: show
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r bio2setup, include=FALSE, eval=FALSE}
+
+#scp -i ~/.ssh/mbp ~/Desktop/Dickens-RNAsplicing-project.html bioinformatics2.erc.monash.edu.au:/home/www/html/home/sbya0003/tmp/Dickens_RNAsplice
+https://bioinformatics.erc.monash.edu/~sbya0003/tmp/Durga.Andrew.GLAM
+
+REPORT FORMATTING
+**This text is bold**
+__This text is also bold__
+
+*This text is italicized*
+_This text is also italicized_
+
+**<u>This text is bold and underlined</u>**
+  
+{width=30% height=30%} - put this after figures if need to adjust size
+
+<div style="text-align: center;">
+**This text is center justified on page, and bolded**    
+</div>
+  
+To yellow highlight words
+<mark>Stroke-related differential gene expression.</mark>    
+
+To add line breaks between sections - here are two line breaks
+<br>
+<br>
+
+
+```
+
+
+#### Rmarkdown    
+
+## {.tabset}
+
+### Introduction    
+
+#### Tutorial materials   
+<hr style="margin-top: 0; margin-bottom: 1;">
+
+- Parts of this tutorial are based on several others (below). I've adapted some of this content to suit the TRM course
+  - online tutorials:
+    - https://monashdatafluency.github.io/r-intro-2/ # this is the Monash Bioinformatics Platform Intro to R tutorial. We mention this on the TRM course website under Module 4 Practicals Tutorial > Essential Concepts in R > Intro to R Notes (https://learning.monash.edu/mod/page/view.php?id=3656743)
+    - https://education.rstudio.com/learn/beginner/ # for some additional material see here. This has links to other good online tutorials including:
+      - Getting Started with R and RStudio - R-Ladies Sydney - https://rladiessydney.org/courses/ryouwithme/
+      - A Gentle Introduction to Tidy Statistics in R - https://posit.co/resources/videos/a-gentle-introduction-to-tidy-statistics-in-r/
+      - R for data science - https://r4ds.had.co.nz/
+      - Publish your work with Rmarkdown - https://posit.co/resources/videos/getting-started-with-r-markdown/
+<br>
+<br>
+
+#### Installing R/Rstudio   
+<hr style="margin-top: 0; margin-bottom: 1;">
+
+- We're going to be using RStudio as it has functions for producing reports (e.g. html, pdf) which publishes all the notes, code and results in one place
+- You'll need to download and install R, then Rstudio
+- R can be downloaded here.
+  - https://www.r-project.org/
+  - https://cran.r-project.org/mirrors.html
+  - You can choose any mirror (database), it will download the same latest version
+  - main thing is to download the correct versiob for your platform/operating system
+- RStudio can be downloaded here.
+  - https://posit.co/download/rstudio-desktop/
+<br>
+
+- **Lets have a look at R/Rsudio**
+- You can open R by itself and code directly in R
+- R also has a basic code editor, e.g. File > New Document
+- Rstudio layout - source code, console, files, plots
+- We're going to open a new Rmarkdown document (rather than just and R script)
+<br>
+<br>
+
+![](/Users/sbya0003/Desktop/pics/Rstudio_pic.png){width=100% height=100%}
+
+#### RStudio basics - layout, formatting  
+<hr style="margin-top: 0; margin-bottom: 1;">
+- Four main quadrants
+  - Q1 - contains: script, data, command to run script
+  - Q2 - contains: console
+  - Q3 - contains: environment
+  - Q4 - contains: files, plots, packages, help   
+- to open a new RMarkdown file, File > New File > R Markdown
+  - this opens an Rmd template to get you started
+
+- Formatting in published outputs: Rmarkdown includes formatting to allow publishing functions
+  - Text formatting:
+    - Use `-` to set indents/bulltet points
+    - Use ** or __ around a word to create **bold text**
+    - \* or \_ around a word to *italicize*
+    - `<u>` around a word to <u>underline</u>
+    - You can also <span style="color:orange;">change</span> <span style="color:green;">the</span> <span style="color:blue;">text</span> <span style="color:red;">colour</span> with color.
+    - Use `background-color` and `color` to <span style="background-color: red;">highlight</span> <span style="background-color: green;">text</span> with <span style="background-color: blue; color: white;">different</span>  <span style="background-color: blue; color: red;">colours</span> text.
+  - Adjust size of text
+    - using `<span>`
+      - This is <span style="font-size: 20px;">20px larger text</span>, this is <span style="font-size: 30px;">30px larger text</span>.
+    - using Markdown headers, e.g. # H1 largest, ## H2, ### H3, #### H4 smallest
+      - however when we're already using ## and ### to indicate the tabs, better to use the px function above.
+  - use #'s for tabs - only really need this if you need different tabs in html output    
+  - you can also add plots and pictures to reports with:
+    - `![](~/Desktop/pics/Rstudio_pic.png){width=100% height=100%}`
+    - you can adjust the size and also justification (e.g. left vs centre)
+  - code chunks (this is a code chunk below)
+    - by default, I have set code to be hidden at the top with `code_folding: hide`
+    - we can also modify the way R handles these code chunks with `eval` and `include`
+    - setting eval=FALSE means the R code within the code chunk will not be evaluated by R (results will not be output)
+    - setting include=FALSE means it will not include the code in the knitted output
+```{r, eval=TRUE, include=TRUE}
+data(mtcars) # this is an inbuilt dataset in R - you'll be working with a few more of these in Assignment 3
+head(mtcars)
+# Load the ggplot2 package
+library(ggplot2)
+
+# Create the scatter plot
+ggplot(mtcars, aes(x = hp, y = cyl)) +
+  geom_point() +
+  labs(title = "Scatterplot of Horsepower (hp) vs. Cylinders (cyl)",
+       x = "Horsepower (hp)",
+       y = "Number of Cylinders (cyl)") +
+  theme_minimal()
+```
+
+```{r, eval=FALSE, include=TRUE}
+# when eval=FALSE, this code chunk will not be evaulated/processed by R
+data(mtcars) # this is an inbuilt dataset in R - you'll be working with a few more of these in Assignment 3
+head(mtcars)
+```
+
+```{r, eval=FALSE, include=FALSE}
+# when eval=FALSE and include=FALSE, this code chunk will not be evaluated and the code will also not be shown in the pdf/html output
+data(mtcars) # this is an inbuilt dataset in R - you'll be working with a few more of these in Assignment 3
+head(mtcars)
+```
+
+- Publishing - 'Knit on Save'
+<br>
+<br>
+
+
+
+#### R/Rstudio basics - packages   
+<hr style="margin-top: 0; margin-bottom: 1;">
+
+- 1. packages
+  - **individual** (e.g. ggplot2) vs **umbrella** (e.g. tidyverse) packages
+    - ggplot2 (commonly used for plotting, we will go over this)
+      individual package
+      - https://cran.r-project.org/web/packages/ggplot2/index.html
+        - Most packages will be stored/found in CRAN (Comprehensive R Archive Network)
+        - this will show the version, package dependencies, references and vignettes
+    - tidyverse
+      - https://ggplot2.tidyverse.org/
+      - ubrella package
+      - collection of 8 packages (ggplot2, dplyr, tidyr, readr, purrr, tibble, stringr, forcats)
+    - edgeR (used for differential gene expression analysis, we will cover in Tutorial #2)
+      - https://bioconductor.org/packages/release/bioc/html/edgeR.html
+        - Many packages also stored in bioconductor
+        - also shows version, dependencies, references, manuals etc
+    - functions, packages, library (ask ChatGPT)
+      - function
+        - A general programming term referring to a block of code that takes input, performs computation, and returns output.
+        - In R, functions are created using the function keyword.
+        - Example: The log() function calculates the logarithm of a number.
+      - package
+        - A collection of R functions, datasets, and documentation bundled together for distribution.
+        - Example: ggplot2, dplyr, and edgeR are R packages.
+        - Packages must be installed before use with install.packages("package_name").
+      - library
+        - A function in R used to load an installed package into the current session.
+        - Example: library(ggplot2) loads the ggplot2 package so its functions can be used.
+        - Note: "library" is sometimes used informally to refer to a package, but technically, library() is a function that loads a package.    
+  - How to install and load packages?
+    - <span style="color:blue;">&gt; install.packages("ggplot2")</span>
+    - for bioconductor packages such as edgeR, you'll need to grab the code from bioconductor, e.g. https://bioconductor.org/packages/release/bioc/html/edgeR.html
+      - <span style="color:blue;">&gt; if (!require("BiocManager", quietly = TRUE))</span>
+      - <span style="color:blue;">&gt; install.packages("BiocManager")</span>
+      - <span style="color:blue;">&gt; BiocManager::install("edgeR")</span>
+    
+    
+```{r, eval=FALSE, include=FALSE}
+some code
+```
+
+<br>
+<br>
+
+#### Other
+- https://monashdatafluency.github.io/r-intro-2/starting.html
+- Some inbuilt functions
+  - calculator, mathematics
+  - basic statistics, e.g. anova(), lm(), glm(), mean(), sd()
+  - inbuilt datasets, e.g. data(car), data(iris)
+  - vectors vs lists
+    - When to use each:
+      - use a vector when you need simple, same-type elements (e.g., numeric calculations).
+      - use a list when you need to store mixed data types or complex structures (e.g., results of a statistical test).
+```{r, eval=TRUE, include=TRUE}
+# a vector of numbers
+v <- c(1, 2, 3, 4)  # Numeric vector
+v
+which(v == 2) # can be queried
+v = v*10 # and modified
+v_char <- c("A", "B", "C")  # can be numeric or character, but not both
+v_char
+v_char[3] # access the third element in this vector
+
+# a list
+lst <- list(10, "hello", TRUE, c(1, 2, 3))  
+lst # can contain different types of elements, numbers, characters, logical (TRUE/FALSE)
+lst[[4]] # access the fourth item in this list
+lst[[4]][2] # access the second element of the fourth item in this list
+```
+
+  - matrix vs dataframe   
+
+![matrix vs dataframw figure](/Users/sbya0003/Desktop/pics/matrix_vs_dataframe.png)
+*source: ChatGPT*
+
+```{r, eval=TRUE, include=TRUE}
+# this is a matrix
+matrix(sample(1:1000, 100), 10,10)
+
+# this is a dataframe
+data(iris)
+head(iris)
+```
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### dataframes in R
+
+#### dataframes in R    
+<hr style="margin-top: 0; margin-bottom: 1;">
+
+- here we will follow the MBP tutorial **Data frames**, and we will also be adding some additional code
+- https://monashdatafluency.github.io/r-intro-2/data_frames.html#loading-data
+
+<br>
+<br>
+
+
+#### 2.1 Setting up   
+<hr style="margin-top: 0; margin-bottom: 1;">
+- download files and install tidyverse
+
+```{r, eval=FALSE, include=TRUE}
+# Download files for this workshop
+download.file(
+  "https://monashdatafluency.github.io/r-intro-2/r-intro.zip",
+  destfile="r-intro.zip")
+unzip("r-intro.zip")
+
+# Install Tidyverse
+install.packages("tidyverse")
+```
+
+<br>
+<br>
+
+
+#### 2.2 Loading data   
+<hr style="margin-top: 0; margin-bottom: 1;">
+- read_csv vs read.csv
+  - read_csv has guessed the type of data each column holds:
+    - `<chr>` - character strings
+    - `<dbl>` - numerical values. Technically these are “doubles”, which is a way of storing numbers with 15 digits precision.
+    - `<lgl>` - logical values, TRUE or FALSE.
+  - We will also encounter:
+    - `<int>` - integers, a fancy name for whole numbers.
+    - `<fct>` - factors, categorical data. We will get to this shortly.
+
+
+
+```{r, eval=TRUE, include=FALSE}
+library(tidyverse)
+geo <- read_csv("r-intro/geo.csv")
+geo2 = read.csv("r-intro/geo.csv")
+```
+
+```{r, eval=TRUE, include=TRUE}
+geo
+head(geo2)
+```
+
+<br>
+<br>
+
+
+
+#### 2.3 Exploring    
+<hr style="margin-top: 0; margin-bottom: 1;">
+- dimensions of dataset: nrow, ncol
+- rownames and column names: rownames(geo), colnames(geo) or names(geo)
+- summary() function can be useful to give very basic statistics of data
+- table() function is also handy - summarises a column of data
+```{r, eval=TRUE, include=TRUE}
+summary(geo)
+table(geo$region)
+```
+
+<br>
+<br>
+
+
+#### 2.4. Subsetting dataframes   
+<hr style="margin-top: 0; margin-bottom: 1;">
+- A way of extracting specific rows and/or columns in your data
+- say we wanted to pull out rows just for countries in Asia
+```{r, eval=TRUE, include=TRUE}
+geo_asia = geo[c(which(geo$region == "asia")),] # this searches for all asia labels in the region column
+head(geo_asia); dim(geo_asia)
+```
+- we can also subset directly
+```{r, eval=TRUE, include=TRUE}
+geo2[1:2,1:2] # pull out rows 1:2 and columns 1:2
+```
+- 2.6.1 A dplyr shorthand
+  - this uses the filter command to use the variable names directly
+```{r, eval=TRUE, include=TRUE}
+filter(geo, lat < 0 & oecd)
+geo_filter = filter(geo, lat < 0 & oecd)
+dim(geo_filter)
+```
+
+<br>
+<br>
+
+
+#### 2.9 Sorting    
+<hr style="margin-top: 0; margin-bottom: 1;">
+- Data frames can be sorted using:
+  - the arrange function in dplyr
+  - or directly with the base R order function
+```{r, eval=TRUE, include=TRUE}
+arrange(geo, lat)
+geo[order(geo$lat),]
+```
+
+
+<br>
+<br>
+
+
+
+#### 2.10 Joining dataframes    
+<hr style="margin-top: 0; margin-bottom: 1;">
+- you can combine rows of data rbind(), combine columns of data cbind()
+  - this assumes that both dataframes have the same number of rows/columns
+  - rbind() assumes that the rownames in each dataset are the same
+- you can also merge() datasets by a 'shared' variable, usually an Id variable
+- the dplyr package also has merge functions (e.g. left_join) that do the same thing as merge()
+  
+```{r, eval=TRUE, include=TRUE}
+gap <- read_csv("r-intro/gap-minder.csv")
+gap
+gap_geo <- left_join(gap, geo, by="name")
+gap_geo
+```
+
+
+<br>
+<br>
+<br>
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### plotting in R
+
+#### plotting in R and with ggplot2    
+<hr style="margin-top: 0; margin-bottom: 1;">
+- https://monashdatafluency.github.io/r-intro-2/plotting.html
+- here we're going to use ggplot2 and some inbuilt base R plotting functions for comparison
+- ggplot2 can be loaded with library(ggplot2) or library(tidyverse)
+- in the scatterplot below we specify
+  - the dataframe that the data is in - gap_geo
+  - x=year, y=life_exp
+
+```{r, eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
+library(tidyverse)
+geo <- read_csv("r-intro/geo.csv")
+gap <- read_csv("r-intro/gap-minder.csv")
+gap_geo <- left_join(gap, geo, by="name")
+ggplot(gap_geo, aes(x=year, y=life_exp)) +
+    geom_point()
+```
+
+- we can of course use the in-built plot() function for a scatterplot, but in order to make it look pretty, we would need to change alot of in-built plotting parameters
+```{r, eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
+plot(gap_geo$year, gap_geo$life_exp, pch=16, xlab="year", ylab="life expectancy")
+plot(gap_geo$year, gap_geo$life_exp, pch=16, xlab="year", ylab="life expectancy", col="#00000050")
+```
+
+
+- this can be further modified
+  - colour points by region
+  - point size by population size
+```{r, eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
+ggplot(gap_geo, aes(x=year, y=life_exp, color=region, size=population)) +
+    geom_point()
+```
+
+- lets make a line plot
+  - now we specify geom_line() rather than geom_point()
+```{r, eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
+ggplot(gap_geo, aes(x=year, y=life_exp, group=name, color=region)) +
+    geom_line()
+```
+
+- and a few other plots/variations of the same data
+```{r, eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
+ggplot(gap_geo, aes(x=year, y=life_exp, group=year)) +
+    geom_violin()
+ggplot(gap_geo, aes(x=year, y=life_exp)) +
+    geom_point() +
+    geom_smooth()
+ggplot(gap_geo, aes(x=year, y=life_exp)) +
+    geom_line(aes(group=name)) +
+    geom_smooth(aes(color=oecd))
+```
+
+- see additional ggplot adjustments
+  - https://monashdatafluency.github.io/r-intro-2/plotting.html
+  - 3.4 Finetuning a plot
+    - modify x and y labels with labs()
+    - change the theme, plot title with theme() and background color with theme_bw()
+    - change the x and y axis ranges with coord_cartesian()
+  - 3.5 Faceting
+    - this allows you to break down and plot the data for different groups with facet_wrap()
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### summarising data
+
+#### summarising data   
+<hr style="margin-top: 0; margin-bottom: 1;">
+- https://monashdatafluency.github.io/r-intro-2/summarizing.html
+- I won't spend alot of time on this, as this section just covers some fairly simple in-built handy functions
+  - 4.1 Summary functions
+    - sum, mean, min, maxi, median, sd
+  - 4.2 missing values
+    - some statistics may fail if we don't explicitly tell R to ignore these, e.g. na.rm=TRUE
+  - 4.3 group summaries
+    - this can be handy if we need to calculate a statistic by group, e.g. mean life expectancy by year
+  - 4.4 t-test
+    - as well as t-test, most other standard statistical tests (e.g. anova, regresion analysis) have an in-built function in R
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+### Public databases
+- In this section we will specifically look at:
+  - 1. an online tutorial for learning how to run a survival analysis
+  - 2. GDC - manual extraction of data for survival analysis in R
+  - 3. GDC - using R packages to interface and extract data for survival analysis in R
+
+<br>
+<br>
+
+
+
+#### 1. simple online tutorial    
+<hr style="margin-top: 0; margin-bottom: 1;">
+https://rviews.rstudio.com/2017/09/25/survival-analysis-with-r/
+
+- load the packages and data
+```{r, eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
+library(survival)
+library(ranger)
+library(ggplot2)
+library(dplyr)
+library(ggfortify)
+library(ggsurvfit)
+
+data(veteran)
+head(veteran)
+dim(veteran)
+
+```
+
+- Kaplan Meier Analysis
+  - The first thing to do is to use Surv() to build the standard survival object. 
+  - The variable **time** records survival time
+  - **status** indicates whether the patient’s death was:
+    - observed (status = 1) OR ...
+    - that survival time was censored (status = 0)
+    - Note that a “+” after the time in the print out of km indicates censoring
+
+```{r, eval=TRUE, include=TRUE}
+km <- with(veteran, Surv(time, status))
+head(km,80)
+
+km_fit <- survfit(Surv(time, status) ~ 1, data=veteran)
+summary(km_fit, times = c(1,30,60,90*(1:10)))
+
+autoplot(km_fit)
+```
+
+  - Next, we look at survival curves by treatment.
+```{r, eval=TRUE, include=TRUE}
+km_trt_fit <- survfit(Surv(time, status) ~ trt, data=veteran)
+autoplot(km_trt_fit)
+
+# compare this to ggplot survival plot
+survfit2(Surv(time, status) ~ trt, data = veteran) %>% 
+  ggsurvfit() +
+  labs(
+    x = "Days",
+    y = "Overall survival probability"
+  )
+```
+
+  - younger vs older than 60
+    - Although the two curves appear to overlap in the first fifty days, younger patients clearly have a better chance of surviving more than a year.
+```{r, eval=TRUE, include=TRUE}
+vet <- mutate(veteran, AG = ifelse((age < 60), "LT60", "OV60"),
+              AG = factor(AG),
+              trt = factor(trt,labels=c("standard","test")),
+              prior = factor(prior,labels=c("N0","Yes")))
+
+km_AG_fit <- survfit(Surv(time, status) ~ AG, data=vet)
+autoplot(km_AG_fit)
+```
+  
+
+
+  
+```{r GDC_workthrough_lastyear, eval=FALSE, include=FALSE}
+
+# Have included this here for reference
+# this was the manual GDC work through from last year, however the website/portal has changed - can no longer access the bcr biotab data
+# rather it now downloads all datasets for the selected cohort
+
+#### 2.1 setting up for a survival analysis - last year
+- Repository
+  - -> Data format - bcr biotab - 470 of 838 cases available, 16 files available
+
+# nationwidechildrens.org_clinical_patient_skcm.txt # this is the file to download	
+IN=read.table("~/Dropbox/2_CCS/5_teaching/2_project files 2 (DATED)/240326_MAIN_to_file/teaching/assignment 1 p1 code + walk through/nationwidechildrens.org_clinical_patient_skcm.txt",sep="\t",head=TRUE)
+IN=IN[,c("bcr_patient_uuid","vital_status","last_contact_days_to","death_days_to","gender","height_cm_at_diagnosis","weight_kg_at_diagnosis","race")]
+IN=IN[3:nrow(IN),] # remove first two rows
+
+# now need to recode data for survival analysis
+
+# create new time variable, which is a merge between death_days_to and last_contact_days_to
+IN$time=IN$death_days_to
+IN$time[c(which(IN$time == "[Not Applicable]"))]=IN$last_contact_days_to[c(which(IN$time == "[Not Applicable]"))]
+
+# create new binary status variable
+IN$status=as.numeric(IN$vital_status == "Dead")
+
+# remove missing data
+IN=IN[c(which(IN$time != "[Completed]")),]
+IN=IN[c(which(IN$time != "[Not Available]")),]
+
+# make sure time variable is numeric
+IN$time=as.numeric(IN$time)
+
+# also need to convert patient Id's to lower case, to match the lower case of the patient Id's when using the 'export cohort' function for specific mutations
+IN$bcr_patient_uuid=tolower(IN$bcr_patient_uuid)
+
+# Now need to add in the mutation status data
+# Analysis Centre - mutation frequency - mutations - RAC1 P29S - Id's of individuals with this mutation obtained with the 'export cohort' function when cross-referencing with your chosen cohort
+RAC1=read.table("~/Dropbox/2_CCS/5_teaching/2_project files 2 (DATED)/240326_MAIN_to_file/teaching/assignment 1 p1 code + walk through/RAC1.tsv",head=TRUE)
+RAC1$RAC1m=1
+names(RAC1)[1]="bcr_patient_uuid"
+
+IN=merge(IN, RAC1,by="bcr_patient_uuid",all=TRUE)
+IN$RAC1m[c(which(is.na(IN$RAC1m)))]=0
+
+library(ggsurvfit)
+#dev.new(height=4, width=4)
+survfit2(Surv(time, status) ~ RAC1m, data = IN) %>% 
+  ggsurvfit() +
+  labs(
+    x = "Days",
+    y = "Overall survival probability"
+  )
+  
+survfit2(Surv(time, status) ~ as.factor(gender), data = IN) %>% 
+  ggsurvfit() +
+  labs(
+    x = "Days",
+    y = "Overall survival probability"
+  )
+
+# switching to coxph for multivariable model
+cox <- coxph(Surv(time, status) ~ RAC1m, data = IN); summary(cox)
+cox <- coxph(Surv(time, status) ~ RAC1m + as.factor(gender), data = IN); summary(cox)
+
+```
+
+<br>
+<br>
+
+
+
+#### 2. GDC - manual extraction of data for survival analysis in R    
+<hr style="margin-top: 0; margin-bottom: 1;">
+- https://portal.gdc.cancer.gov/
+- bone marrow - NOTCH 1
+  - Here I'm going to manually extract data for individuals who have cancer related to tissue:bone marrow, and any individual within that cohort that has a NOTCH1 mutation
+    - For this example, there are a good number of individuals included (n=7,625)
+    - NOTCH1 was chosen simply as it was one of the most common genes with a mutation in this cohort
+
+  - GDC manual extraction
+    - Click on 'Cohort Builder' tab, this is where you select individuals for your dataset
+    - From Tissue or Organ of Origin, selected bone marrow
+    - Now click on 'Analysis Center' > 'Mutation Frequency'
+    - Selected NOTCH1 - So there are 7,625 cases, 181 with a NOTCH1 mutation
+    - Save Cohort > Save As...
+    - click on the 7,625 CASES button > Clinical tab > TSV
+      - this will download the data as a Zip file - place it somewhere on your laptop where its easy to point to in R. Below I've placed it in a folder called GDCdata on my desktop
+
+
+  - read data into R...
+
+```{r, eval=TRUE, include=TRUE}
+
+F = read.delim("~/Desktop/GDCdata/clinical.cohort.2025-03-19/follow_up.tsv", sep = "\t", header = TRUE, fill = TRUE) # read in the follow_up.tsv file
+length(which(!duplicated(F$case_id))) # 5949 - so a bit less than 7625
+C = read.delim("~/Desktop/GDCdata/clinical.cohort.2025-03-19/clinical.tsv", sep = "\t", header = TRUE, fill = TRUE) # read in the clinical.tsv file
+length(which(!duplicated(C$case_id))) # 7625
+  
+```
+
+
+  - we'll now need to extract/convert data into a format suitable for survival analysis
+    - time: time to outcome (death, disease) or last time observed
+    - status: 1=death/disease, 0=no outcome
+
+
+```{r, eval=TRUE, include=TRUE}
+
+# extract days to death data from 'days_to_death' column
+Cdtd=C[,c("case_id","days_to_death")]
+Cdtd=Cdtd[c(which(Cdtd$days_to_death != "'--")),]
+head(Cdtd)
+length(which(duplicated(Cdtd$case_id)))
+Cdtd=Cdtd[c(which(!duplicated(Cdtd$case_id))),]
+dim(Cdtd)
+#hist(Cdtd$days_to_death)
+hist(as.numeric(Cdtd$days_to_death),breaks=100) # lets look at a histogram of days until death
+
+# now extract days to last follow-up from the days_to_last_follow_up column
+# this will be used to code follow-up time for individuals who were still alive at the end of the observed follow-up
+Cfu=C[,c("case_id","days_to_last_follow_up")] # just extract the variables that we need
+Cfu=Cfu[c(which(Cfu$days_to_last_follow_up != "'--")),] # need to remove rows with this 'filler'
+dim(Cfu)
+head(Cfu)
+Cfu=Cfu[c(which(!duplicated(Cfu$days_to_last_follow_up))),] # this file includes alot of duplicates to help 'pad' for other variables that may have more than one level recorded for one patient, i.e. they will have multiple rows which cause duplicates to appear for this variable that need to be removed. 
+
+Ffu=F[,c("case_id","days_to_follow_up")] # just extract variables we need
+Ffu=Ffu[c(which(Ffu$days_to_follow_up != "'--")),] # need to remove rows with this 'filler'
+Ffu=Ffu[c(which(!duplicated(Ffu$case_id))),] # need to remove duplicated rows
+
+# now we can merge the death and follow-up variables together, using the case Id as the merge variable
+M=merge(Ffu,Cfu,by="case_id",all=TRUE)
+M=merge(M,Cdtd,by="case_id",all=TRUE)
+# you'll see that we actually merged 3 different extracted variables, days_to_death, days_to_last_follow_up and days_to_follow_up
+M[1:30,]
+
+# because we have 3 columns of data, will write a loop to pull out 'time' (time to death or last followup) and 'status' (dead/alive at that time)
+# this loop will first identify those that have died...
+# ...then if the individual did not die, look in the days_to_last_follow_up column for a day value
+# If there is no day value in the days_to_death or days_to_last_follow_up column, look in the days_to_follow_up column
+
+M$time=NA
+M$status=0
+for(i in 1:nrow(M)) {
+	if(!is.na(M$days_to_death[i])) {
+		M$time[i]=M$days_to_death[i]
+		M$status[i]=1
+	} else {
+		if(!is.na(M$days_to_last_follow_up[i])) {M$time[i]=M$days_to_last_follow_up[i]} else {
+  		if(!is.na(M$days_to_follow_up[i])) {M$time[i]=M$days_to_follow_up[i]}
+		}
+	}
+}
+M[1:30,]
+
+length(which(is.na(M$time))) # checking if there are any NA values in the time column that we just coded
+
+```
+
+
+
+  - now we need to define who has a NOTCH1 mutation - back to GDC to manually extract this
+    - there are n=181 with a NOTCH1 mutation
+    - Click on '+' to Save a new cohort of these cases
+    - click on 181 Cases tab
+    - click on Clinical > TSV to download
+    - now we will read this NOTCH1 subset in, process and merge it into our dataset
+
+
+```{r, eval=TRUE, include=TRUE}
+NOTCH1 = read.delim("~/Desktop/GDCdata/NOTCH1_mutation/clinical.cohort.2025-03-20/clinical.tsv", sep = "\t", header = TRUE, fill = TRUE)
+NOTCH1$mutant=1 # indicator
+NOTCH1=NOTCH1[,c("case_id","mutant")] # too many columns, lets just pull out the Id and NOTCH1 indicator
+NOTCH1=NOTCH1[c(which(!duplicated(NOTCH1$case_id))),]
+dim(NOTCH1) # n=181, same as whats showing on the GDC
+
+# now merge this in with the follow-up data
+dim(M); M=merge(M,NOTCH1,by="case_id",all=TRUE); dim(M)
+# there were slightly more (n=4) after the merge - this means we have 4 individuals with missing followup data
+M=M[c(which(!is.na(M$status))),] # remove NA values that have popped up in the merge
+M$mutant[c(which(is.na(M$mutant)))]=0
+table(M$mutant)
+M$time=as.numeric(M$time)
+M[1:30,]
+```
+
+
+  - now we are ready to run the survival analysis
+  
+```{r, eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
+library(ggsurvfit)
+#dev.new(height=4, width=4)
+survfit2(Surv(time, status) ~ mutant, data = M) %>% 
+  ggsurvfit() +
+  labs(
+    x = "Days",
+    y = "Overall survival probability"
+)
+# this looks slightly different than online, notice the followup time...
+# it is roughly 12 years in the GDC portal and 6500/365=~18 years with our extracted data!
+# So we're including individuals who likely have incomplete follow-up time, which likely came from including the days_to_follow_up, when we should have just included the days_to_last_follow_up variable
+# this will mean we will lose some individuals who don't have data for the days_to_last_follow_up variable
+# dim(M) # reduces from n=6501...
+M2=M[c(which( !is.na(M$days_to_death) | !is.na(M$days_to_last_follow_up) )),]
+# dim(M2) # to n=2510
+
+survfit2(Surv(time, status) ~ mutant, data = M2) %>% 
+  ggsurvfit() +
+  labs(
+    x = "Days",
+    y = "Overall survival probability"
+)
+# this now looks much closer to what we see online in terms of follow-up time and differences between individuals with and without a NOTCH1 mutation
+# we don't expect it to be exact, as some GDC data is restricted and will not be downloaded.
+
+```
+  
+
+
+
+
+
+<br>
+<br>
+
+
+
+
+
+  
+
+
+#### 3. GDC - using R packages to interface and extract data for survival analysis in R   
+<hr style="margin-top: 0; margin-bottom: 1;">
+- Here I use the TCGAbiolinks R package to download the clinical/follow-up data - seems to be the only one available for extracting this data
+- I also end up using the GenomicDataCommons R package to download gene, as the TCGAbiolinks did not seem well suited for this
+- **TCGAbiolinks: An R/Bioconductor package for integrative analysis with GDC data**
+  - see https://bioconductor.org/packages/release/bioc/html/TCGAbiolinks.html
+- **GenomicDataCommons: NIH / NCI Genomic Data Commons Access**
+  - https://bioconductor.org/packages/release/bioc/html/GenomicDataCommons.html
+
+- In this example, let's extract TCGA-specific data, and look individuals with a TP53 mutation
+
+- extract the follow-up data, days to death or days to last follow up  
+```{r, eval=FALSE, include=TRUE}
+
+# I've already run this code chunk - the GDCquery() may take ~5-10 minutes to query so will not rerun at the tutorial today
+# instead I've included some notes below, and will read in a pre-processed file below
+
+library(TCGAbiolinks) 
+QUERY_clin <- GDCquery(
+  project = c("TCGA-SKCM","TCGA-BRCA","TCGA-KIRC","TCGA-LUAD","TCGA-LUSC"), data.category = "Clinical",
+  data.type = "Clinical Supplement",
+  data.format = "BCR Biotab",
+  #case_ids = Meta_ALL$case_id
+) # this takes a few minutes to query
+GDCdownload(QUERY_clin) # this may also take a few minutes if the first time downloaded
+Clinical_Meta <- GDCprepare(QUERY_clin)
+
+head(Clinical_Meta) # this will show some of the extracted data for the SKCM dataset
+
+$clinical_patient_skcm
+# A tibble: 472 × 65
+   bcr_patient_uuid  bcr_patient_barcode form_completion_date prospective_collection retrospective_collec…¹ birth_days_to gender height_cm_at_diagnosis weight_kg_at_diagnosis race  ethnicity history_other_malign…²
+   <chr>             <chr>               <chr>                <chr>                  <chr>                  <chr>         <chr>  <chr>                  <chr>                  <chr> <chr>     <chr>                 
+ 1 bcr_patient_uuid  bcr_patient_barcode form_completion_date tissue_prospective_co… tissue_retrospective_… days_to_birth gender height                 weight                 race  ethnicity other_dx              
+ 2 CDE_ID:           CDE_ID:2003301      CDE_ID:              CDE_ID:3088492         CDE_ID:3088528         CDE_ID:30082… CDE_I… CDE_ID:649             CDE_ID:651             CDE_… CDE_ID:2… CDE_ID:3382736        
+ 3 5564E6A7-2195-4B… TCGA-3N-A9WB        2014-5-29            YES                    NO                     -26176        MALE   175                    78                     WHITE NOT HISP… No                    
+ 4 551E071A-C290-4B… TCGA-3N-A9WC        2014-5-29            YES                    NO                     -30286        MALE   183                    68                     WHITE NOT HISP… No                    
+ 5 A29A20E3-5C2C-4F… TCGA-3N-A9WD        2014-5-29            YES                    NO                     -30163        MALE   183                    116                    WHITE NOT HISP… No                    
+ 6 3DD5A206-D7F3-42… TCGA-BF-A1PU        2013-4-25            YES                    NO                     -17025        FEMALE 160                    58                     WHITE [Unknown] No                    
+ 7 EFF78AF6-0F68-49… TCGA-BF-A1PV        2013-4-25            YES                    NO                     -27124        FEMALE 160                    70                     WHITE [Unknown] No                    
+ 8 197AC33E-D5DF-40… TCGA-BF-A1PX        2013-4-25            YES                    NO                     -20626        MALE   175                    78                     WHITE NOT HISP… No                    
+ 9 455F982C-A067-46… TCGA-BF-A1PZ        2013-4-25            YES                    NO                     -26240        FEMALE 163                    56                     WHITE NOT HISP… No                    
+10 633DDC04-C424-42… TCGA-BF-A1Q0        2013-4-25            YES                    NO                     -29380        MALE   173                    69                     WHITE NOT HISP… No                    
+# ℹ 462 more rows
+# ℹ abbreviated names: ¹​retrospective_collection, ²​history_other_malignancy
+# ℹ 53 more variables: history_neoadjuvant_treatment...13 <chr>, tumor_status <chr>, vital_status <chr>, last_contact_days_to <chr>, death_days_to <chr>, primary_melanoma_known_dx <chr>,
+#   primary_multiple_at_dx <chr>, primary_at_dx_count <chr>, primary_location <chr>, breslow_thickness_at_diagnosis <chr>, clark_level_at_diagnosis <chr>, primary_melanoma_tumor_ulceration <chr>,
+#   primary_melanoma_mitotic_rate <chr>, radiation_therapy_to_primary <chr>, initial_pathologic_dx_year <chr>, age_at_diagnosis <chr>, ajcc_staging_edition <chr>, ajcc_tumor_pathologic_pt <chr>,
+#   ajcc_nodes_pathologic_pn <chr>, ajcc_metastasis_pathologic_pm <chr>, ldh_level <chr>, ajcc_pathologic_tumor_stage <chr>, submitted_tumor_dx_days_to <chr>, submitted_tumor_site <chr>,
+#   metastatic_tumor_site <chr>, primary_melanoma_skin_type <chr>, prior_radiation_therapy <chr>, history_neoadjuvant_treatment...40 <chr>, history_neoadjuvant_tx_type <chr>, …
+# ℹ Use `print(n = ...)` to see more rows
+
+$clinical_radiation_skcm
+# A tibble: 149 × 18
+   bcr_patient_uuid                     bcr_patient_barcode bcr_radiation_barcode bcr_radiation_uuid   form_completion_date radiation_therapy_type radiation_therapy_site radiation_total_dose radiation_adjuvant_u…¹
+   <chr>                                <chr>               <chr>                 <chr>                <chr>                <chr>                  <chr>                  <chr>                <chr>                 
+ 1 bcr_patient_uuid                     bcr_patient_barcode bcr_radiation_barcode bcr_radiation_uuid   form_completion_date radiation_type         anatomic_treatment_si… radiation_dosage     units                 
+ 2 CDE_ID:                              CDE_ID:2003301      CDE_ID:               CDE_ID:              CDE_ID:              CDE_ID:2842944         CDE_ID:2793522         CDE_ID:2721441       CDE_ID:61446          
+ 3 A29A20E3-5C2C-4F37-B93E-AE9EBC46EC53 TCGA-3N-A9WD        TCGA-3N-A9WD-R60044   483202B0-173B-42D1-… 2014-5-29            External               Distant site           4800                 cGy                   
+ 4 238111F9-A08B-49B4-9035-CC43026330E7 TCGA-D3-A1Q5        TCGA-D3-A1Q5-R32604   775FC64B-C831-4FA1-… 2012-10-2            External               Regional site          30                   Gy                    
+ 5 DF6303CD-FFB5-422F-9865-B09029A6D54F TCGA-D3-A1Q7        TCGA-D3-A1Q7-R35145   B40C4808-DC62-47C3-… 2012-10-10           External               Regional site          3000                 cGy                   
+ 6 7B7A49B5-5BE8-4966-8F3A-E6E01E694F86 TCGA-D3-A1Q8        TCGA-D3-A1Q8-R35146   1A047F7E-7143-4E7B-… 2012-10-10           External               Regional site          3000                 cGy                   
+ 7 19322032-C144-4962-B886-37606DAD33B7 TCGA-D3-A2J7        TCGA-D3-A2J7-R35212   F0214A29-5353-4E57-… 2012-10-10           External               Regional site          3000                 cGy                   
+ 8 E9E615A1-9323-49D3-904C-FCF4887FEA61 TCGA-D3-A2J9        TCGA-D3-A2J9-R35214   17926EC9-C3C7-49B9-… 2012-10-10           External               Regional site          30                   Gy                    
+ 9 33D7CCCB-6349-4337-8C5B-6E3E8B3C7AF1 TCGA-D3-A2JA        TCGA-D3-A2JA-R35215   9683BAE9-ED79-4C3D-… 2012-10-10           External               Local Recurrence       35                   Gy                    
+10 3A27966B-2C4C-402F-B71B-DF7925C36A7C TCGA-D3-A2JH        TCGA-D3-A2JH-R34873   E9C846D6-0486-42BD-… 2012-10-10           External               Regional site          3000                 cGy                   
+# ℹ 139 more rows
+# ℹ abbreviated name: ¹​radiation_adjuvant_units
+# ℹ 9 more variables: radiation_adjuvant_fractions_total <chr>, radiation_therapy_started_days_to <chr>, radiation_therapy_ongoing_indicator <chr>, radiation_therapy_ended_days_to <chr>,
+#   treatment_best_response <chr>, course_number <chr>, radiation_type_other <chr>, therapy_regimen <chr>, therapy_regimen_other <chr>
+# ℹ Use `print(n = ...)` to see more rows
+
+$clinical_follow_up_v2.0_skcm
+# A tibble: 391 × 29
+   bcr_patient_uuid     bcr_patient_barcode bcr_followup_barcode bcr_followup_uuid form_completion_date followup_lost_to radiation_treatment_…¹ pharmaceutical_tx_ad…² tumor_status vital_status last_contact_days_to
+   <chr>                <chr>               <chr>                <chr>             <chr>                <chr>            <chr>                  <chr>                  <chr>        <chr>        <chr>               
+ 1 bcr_patient_uuid     bcr_patient_barcode bcr_followup_barcode bcr_followup_uuid form_completion_date lost_follow_up   radiation_therapy      postoperative_rx_tx    person_neop… vital_status days_to_last_follow…
+ 2 CDE_ID:              CDE_ID:2003301      CDE_ID:              CDE_ID:           CDE_ID:              CDE_ID:61333     CDE_ID:2005312         CDE_ID:3397567         CDE_ID:2759… CDE_ID:5     CDE_ID:3008273      
+ 3 551E071A-C290-4B48-… TCGA-3N-A9WC        TCGA-3N-A9WC-F67104  BA36CE25-3689-4E… 2014-11-4            NO               NO                     NO                     WITH TUMOR   Alive        2022                
+ 4 3DD5A206-D7F3-42F1-… TCGA-BF-A1PU        TCGA-BF-A1PU-F68906  3FC09348-32EC-48… 2014-12-23           YES              [Not Available]        [Not Available]        [Not Availa… [Not Availa… [Not Available]     
+ 5 EFF78AF6-0F68-49B9-… TCGA-BF-A1PV        TCGA-BF-A1PV-F68907  C174F01D-D88D-49… 2014-12-23           YES              [Not Available]        [Not Available]        [Not Availa… [Not Availa… [Not Available]     
+ 6 455F982C-A067-46AC-… TCGA-BF-A1PZ        TCGA-BF-A1PZ-F68909  4B1D5ACA-C24D-4E… 2014-12-23           NO               NO                     NO                     TUMOR FREE   Alive        853                 
+ 7 633DDC04-C424-42C8-… TCGA-BF-A1Q0        TCGA-BF-A1Q0-F68910  48394337-6B3D-46… 2014-12-23           NO               NO                     NO                     TUMOR FREE   Alive        831                 
+ 8 62393DAB-AB41-4785-… TCGA-BF-A3DJ        TCGA-BF-A3DJ-F65978  6863AADE-07FC-4A… 2014-12-23           YES              [Not Available]        [Not Available]        [Not Availa… [Not Availa… [Not Available]     
+ 9 E9F0F030-D9AA-47C8-… TCGA-BF-A3DL        TCGA-BF-A3DL-F68911  196EB9F7-39D2-40… 2014-12-23           NO               NO                     NO                     TUMOR FREE   Alive        769                 
+10 1CA2EB9F-9496-450F-… TCGA-BF-A3DM        TCGA-BF-A3DM-F68913  AE5E936F-7FDB-4C… 2014-12-23           NO               NO                     NO                     TUMOR FREE   Alive        601                 
+# ℹ 381 more rows
+# ℹ abbreviated names: ¹​radiation_treatment_adjuvant, ²​pharmaceutical_tx_adjuvant
+# ℹ 18 more variables: death_days_to <chr>, subsequent_known_primaries <chr>, new_tumor_event_dx_indicator <chr>, new_tumor_event_dx_days_to <chr>, new_tumor_event_surgery <chr>,
+#   new_tumor_event_surgery_days_to <chr>, new_tumor_event_radiation_tx <chr>, new_tumor_event_pharmaceutical_tx <chr>, new_tumor_event_type <chr>, new_tumor_event_met_site <chr>,
+#   new_tumor_event_met_site_other <chr>, new_tumor_event_melanoma_location <chr>, melanoma_primary_count <chr>, new_tumor_event_melanoma_site <chr>, new_tumor_event_histo_type <chr>, new_tumor_event_site <chr>,
+#   followup_reason <chr>, nte_anatomic_site_count <chr>
+# ℹ Use `print(n = ...)` to see more rows
+
+$clinical_omf_v4.0_skcm
+# A tibble: 32 × 30
+   bcr_patient_uuid                     bcr_patient_barcode bcr_omf_barcode  bcr_omf_uuid form_completion_date malignancy_type other_malignancy_dx_…¹ surgery_indicator other_malignancy_sur…² other_malignancy_sur…³
+   <chr>                                <chr>               <chr>            <chr>        <chr>                <chr>           <chr>                  <chr>             <chr>                  <chr>                 
+ 1 bcr_patient_uuid                     bcr_patient_barcode bcr_omf_barcode  bcr_omf_uuid form_completion_date malignancy_type days_to_other_maligna… surgery_indicator surgery_type           days_to_surgical_rese…
+ 2 CDE_ID:                              CDE_ID:2003301      CDE_ID:          CDE_ID:      CDE_ID:              CDE_ID:3182890  CDE_ID:3462301         CDE_ID:3186538    CDE_ID:3462300         CDE_ID:3462302        
+ 3 2EC330F8-96E4-4270-AADC-563BB72F4B2C TCGA-D3-A2JE        TCGA-D3-A2JE-O1… A6D7215E-8F… 2011-6-27            Synchronous Ma… [Not Available]        [Not Available]   [Not Available]        188                   
+ 4 C58638ED-A38C-4494-A41E-6EE5283A7A59 TCGA-D3-A2JF        TCGA-D3-A2JF-O1… F57B990D-2D… 2011-6-27            Prior Malignan… [Not Available]        [Not Available]   [Not Available]        [Not Available]       
+ 5 C58638ED-A38C-4494-A41E-6EE5283A7A59 TCGA-D3-A2JF        TCGA-D3-A2JF-O1… F84B2888-5F… 2011-6-27            Prior Malignan… [Not Available]        [Not Available]   [Not Available]        [Not Available]       
+ 6 16182443-12A1-4B0F-A6AB-33C2942E2991 TCGA-D3-A3C8        TCGA-D3-A3C8-O1… EA5301AB-2D… 2011-9-11            Prior Malignan… [Not Available]        [Not Available]   [Not Available]        [Not Available]       
+ 7 16182443-12A1-4B0F-A6AB-33C2942E2991 TCGA-D3-A3C8        TCGA-D3-A3C8-O1… 28E0743F-36… 2011-9-11            Prior Malignan… [Not Available]        [Not Available]   [Not Available]        [Not Available]       
+ 8 0153F141-625E-4623-9F8A-296678002C63 TCGA-D3-A3ML        TCGA-D3-A3ML-O1… C4E381E0-58… 2011-12-8            Prior Malignan… [Not Available]        [Not Available]   [Not Available]        [Not Available]       
+ 9 0153F141-625E-4623-9F8A-296678002C63 TCGA-D3-A3ML        TCGA-D3-A3ML-O1… 75353761-4D… 2011-12-8            Prior Malignan… [Not Available]        [Not Available]   [Not Available]        [Not Available]       
+10 0153F141-625E-4623-9F8A-296678002C63 TCGA-D3-A3ML        TCGA-D3-A3ML-O1… 33ED7364-ED… 2011-12-8            Prior Malignan… [Not Available]        [Not Available]   [Not Available]        [Not Available]       
+# ℹ 22 more rows
+# ℹ abbreviated names: ¹​other_malignancy_dx_days_to, ²​other_malignancy_surgery_type, ³​other_malignancy_surgery_days_to
+# ℹ 20 more variables: pharmaceutical_therapy_indicator <chr>, pharmaceutical_therapy_extent <chr>, pharmaceutical_therapy_drug_name <chr>, pharmaceutical_tx_started_days_to <chr>,
+#   radiation_therapy_indicator <chr>, radiation_therapy_extent <chr>, history_rt_tx_to_site_of_tcga_tumor <chr>, radiation_therapy_started_days_to <chr>, ajcc_staging_edition <chr>,
+#   ajcc_tumor_pathologic_pt <chr>, ajcc_nodes_pathologic_pn <chr>, ajcc_metastasis_pathologic_pm <chr>, ajcc_pathologic_tumor_stage <chr>, clinical_stage <chr>, other_malignancy_anatomic_site <chr>,
+#   other_malignancy_anatomic_site_text <chr>, other_malignancy_histological_type <chr>, other_malignancy_histological_type_text <chr>, other_malignancy_laterality <chr>, stage_other <chr>
+# ℹ Use `print(n = ...)` to see more rows
+
+$clinical_drug_skcm
+# A tibble: 267 × 28
+   bcr_patient_uuid        bcr_patient_barcode bcr_drug_barcode bcr_drug_uuid form_completion_date pharmaceutical_thera…¹ clinical_trial_drug_…² pharmaceutical_thera…³ pharmaceutical_tx_st…⁴ pharmaceutical_tx_on…⁵
+   <chr>                   <chr>               <chr>            <chr>         <chr>                <chr>                  <chr>                  <chr>                  <chr>                  <chr>                 
+ 1 bcr_patient_uuid        bcr_patient_barcode bcr_drug_barcode bcr_drug_uuid form_completion_date drug_name              clinical_trail_drug_c… therapy_type           days_to_drug_therapy_… therapy_ongoing       
+ 2 CDE_ID:                 CDE_ID:2003301      CDE_ID:          CDE_ID:       CDE_ID:              CDE_ID:2975232         CDE_ID:3378323         CDE_ID:2793530         CDE_ID:3392465         CDE_ID:3103479        
+ 3 8C54FCFD-999F-43C5-B31… TCGA-D3-A1Q1        TCGA-D3-A1Q1-D3… A837F724-544… 2012-10-2            Cyclophosphamide       [Not Available]        Chemotherapy           247                    NO                    
+ 4 8C54FCFD-999F-43C5-B31… TCGA-D3-A1Q1        TCGA-D3-A1Q1-D4… 18E0B29D-583… 2013-2-22            [Not Available]        Melanoma-derived help… Immunotherapy          247                    NO                    
+ 5 8C54FCFD-999F-43C5-B31… TCGA-D3-A1Q1        TCGA-D3-A1Q1-D4… DFD48E5E-C36… 2013-2-22            [Not Available]        Class I MHC restricte… Vaccine                247                    NO                    
+ 6 29476D6A-0D06-4A18-891… TCGA-D3-A1Q3        TCGA-D3-A1Q3-D3… 762FC34B-A29… 2013-1-7             Cisplatin              [Not Available]        Chemotherapy           362                    NO                    
+ 7 1E05DA2E-7DD7-4C98-9E7… TCGA-D3-A1Q6        TCGA-D3-A1Q6-D3… 8036ED31-A3E… 2012-10-2            Interferon             [Not Available]        Immunotherapy          111                    NO                    
+ 8 798074D3-0B84-4DD5-AA8… TCGA-D3-A1Q9        TCGA-D3-A1Q9-D3… 15D5B49C-2D3… 2012-10-10           Lupron                 [Not Available]        Hormone Therapy        356                    NO                    
+ 9 798074D3-0B84-4DD5-AA8… TCGA-D3-A1Q9        TCGA-D3-A1Q9-D3… A441C4EF-216… 2012-10-10           GP-100                 [Not Available]        Vaccine                356                    NO                    
+10 FBEE9FE7-8BED-41A6-BCF… TCGA-D3-A1QA        TCGA-D3-A1QA-D3… 22FADF39-879… 2012-10-2            recMAGE- A3            [Not Available]        Vaccine                1485                   NO                    
+# ℹ 257 more rows
+# ℹ abbreviated names: ¹​pharmaceutical_therapy_drug_name, ²​clinical_trial_drug_classification, ³​pharmaceutical_therapy_type, ⁴​pharmaceutical_tx_started_days_to, ⁵​pharmaceutical_tx_ongoing_indicator
+# ℹ 18 more variables: pharmaceutical_tx_ended_days_to <chr>, treatment_best_response <chr>, days_to_stem_cell_transplantation <chr>, pharm_regimen <chr>, pharm_regimen_other <chr>,
+#   pharma_adjuvant_cycles_count <chr>, pharma_type_other <chr>, pharmaceutical_tx_dose_units <chr>, pharmaceutical_tx_total_dose_units <chr>, prescribed_dose <chr>, regimen_number <chr>,
+#   route_of_administration <chr>, stem_cell_transplantation <chr>, stem_cell_transplantation_type <chr>, therapy_regimen <chr>, therapy_regimen_other <chr>, total_dose <chr>, tx_on_clinical_trial <chr>
+# ℹ Use `print(n = ...)` to see more rows
+
+$clinical_nte_skcm
+# A tibble: 761 × 15
+   bcr_patient_uuid                bcr_patient_barcode new_tumor_event_dx_d…¹ new_tumor_event_surg…² new_tumor_event_surg…³ new_tumor_event_radi…⁴ new_tumor_event_phar…⁵ new_tumor_event_type new_tumor_event_met_…⁶
+   <chr>                           <chr>               <chr>                  <chr>                  <chr>                  <chr>                  <chr>                  <chr>                <chr>                 
+ 1 bcr_patient_uuid                bcr_patient_barcode days_to_new_tumor_eve… new_tumor_event_addit… days_to_new_tumor_eve… additional_radiation_… additional_pharmaceut… new_neoplasm_event_… new_tumor_metastasis_…
+ 2 CDE_ID:                         CDE_ID:2003301      CDE_ID:3392464         CDE_ID:3427611         CDE_ID:3008335         CDE_ID:3427615         CDE_ID:3427616         CDE_ID:3119721       CDE_ID:3430936        
+ 3 5564E6A7-2195-4B0D-994E-B0617B… TCGA-3N-A9WB        426                    YES                    457                    NO                     NO                     Locoregional Recurr… Other, Specify        
+ 4 5564E6A7-2195-4B0D-994E-B0617B… TCGA-3N-A9WB        457                    NO                     [Not Available]        NO                     NO                     Distant Metastasis   Lung                  
+ 5 5564E6A7-2195-4B0D-994E-B0617B… TCGA-3N-A9WB        457                    NO                     [Not Available]        NO                     NO                     Distant Metastasis   Bone                  
+ 6 5564E6A7-2195-4B0D-994E-B0617B… TCGA-3N-A9WB        487                    NO                     [Not Available]        NO                     NO                     Distant Metastasis   Liver                 
+ 7 5564E6A7-2195-4B0D-994E-B0617B… TCGA-3N-A9WB        487                    NO                     [Not Available]        YES                    NO                     Distant Metastasis   Brain                 
+ 8 551E071A-C290-4B48-9000-F64C2A… TCGA-3N-A9WC        1705                   YES                    1705                   NO                     NO                     Distant Metastasis   Lung                  
+ 9 A29A20E3-5C2C-4F37-B93E-AE9EBC… TCGA-3N-A9WD        306                    NO                     [Not Available]        NO                     NO                     Distant Metastasis   Brain                 
+10 3DD5A206-D7F3-42F1-B9CC-4B31C7… TCGA-BF-A1PU        484                    YES                    484                    NO                     YES                    Distant Metastasis   Lung                  
+# ℹ 751 more rows
+# ℹ abbreviated names: ¹​new_tumor_event_dx_days_to, ²​new_tumor_event_surgery, ³​new_tumor_event_surgery_days_to, ⁴​new_tumor_event_radiation_tx, ⁵​new_tumor_event_pharmaceutical_tx, ⁶​new_tumor_event_met_site
+# ℹ 6 more variables: new_tumor_event_met_site_other <chr>, new_tumor_event_melanoma_location <chr>, new_tumor_event_melanoma_site <chr>, new_tumor_event_histo_type <chr>, new_tumor_event_site <chr>,
+#   nte_anatomic_site_count <chr>
+# ℹ Use `print(n = ...)` to see more rows
+
+# we can use ls() to see all extracted datasets
+ls(Clinical_Meta)
+ [1] "clinical_drug_brca"               "clinical_drug_kirc"               "clinical_drug_luad"               "clinical_drug_lusc"               "clinical_drug_skcm"              
+ [6] "clinical_follow_up_v1.0_kirc"     "clinical_follow_up_v1.0_luad"     "clinical_follow_up_v1.0_lusc"     "clinical_follow_up_v1.5_brca"     "clinical_follow_up_v2.0_skcm"    
+[11] "clinical_follow_up_v2.1_brca"     "clinical_follow_up_v4.0_brca"     "clinical_follow_up_v4.0_nte_brca" "clinical_nte_brca"                "clinical_nte_kirc"               
+[16] "clinical_nte_luad"                "clinical_nte_lusc"                "clinical_nte_skcm"                "clinical_omf_v4.0_brca"           "clinical_omf_v4.0_kirc"          
+[21] "clinical_omf_v4.0_luad"           "clinical_omf_v4.0_lusc"           "clinical_omf_v4.0_skcm"           "clinical_patient_brca"            "clinical_patient_kirc"           
+[26] "clinical_patient_luad"            "clinical_patient_lusc"            "clinical_patient_skcm"            "clinical_radiation_brca"          "clinical_radiation_kirc"         
+[31] "clinical_radiation_luad"          "clinical_radiation_lusc"          "clinical_radiation_skcm"         
+
+
+# Here I'm pulling out the 'clinical_patient..' data for each project - this has the days to death or last follow-up variables we need
+IN=as.data.frame(Clinical_Meta$clinical_patient_skcm)
+IN2=as.data.frame(Clinical_Meta$clinical_patient_brca)
+IN3=as.data.frame(Clinical_Meta$clinical_patient_kirc)
+IN4=as.data.frame(Clinical_Meta$clinical_patient_luad)
+IN5=as.data.frame(Clinical_Meta$clinical_patient_lusc)
+
+# note that the different projects (e.g. SKCM, BRCA) may have slightly different variables
+> dim(IN)
+[1] 472  65 -> 65 columns or variables
+> dim(IN2)
+[1] 1099  112 -> columns or variables
+> dim(IN3)
+[1] 539  61
+> dim(IN4)
+[1] 524 123
+> dim(IN5)
+[1] 506 107
+# some of these variables might be interesting to investigate as covariates in out survival analysis (treatment type, tumour site etc)
+
+# For this tutorial, we will just extract days to and gender variables
+IN=IN[,c("bcr_patient_uuid","last_contact_days_to","death_days_to","gender")]; IN=IN[3:nrow(IN),] # remove first two rows
+IN2=IN2[,c("bcr_patient_uuid","last_contact_days_to","death_days_to","gender")]; IN2=IN2[3:nrow(IN2),] # remove first two rows
+IN3=IN3[,c("bcr_patient_uuid","last_contact_days_to","death_days_to","gender")]; IN3=IN3[3:nrow(IN3),] # remove first two rows
+IN4=IN4[,c("bcr_patient_uuid","last_contact_days_to","death_days_to","gender")]; IN4=IN4[3:nrow(IN4),] # remove first two rows
+IN5=IN5[,c("bcr_patient_uuid","last_contact_days_to","death_days_to","gender")]; IN5=IN5[3:nrow(IN5),] # remove first two rows
+
+IN=rbind(IN,IN2,IN3,IN4,IN5)
+write.csv(IN, "~/Desktop/GDCdata/R_query_extracted/GDC_days_data.csv",row.names=FALSE)
+```
+  
+- process the follow-up data  
+```{r, eval=TRUE, include=TRUE}
+IN=read.csv("~/Desktop/GDCdata/R_query_extracted/GDC_days_data.csv")
+
+# now need to recode data for survival analysis
+
+# create new time variable, which is a merge between death_days_to and last_contact_days_to
+IN$time=IN$death_days_to
+IN$time[c(which(IN$time == "[Not Applicable]"))]=IN$last_contact_days_to[c(which(IN$time == "[Not Applicable]"))]
+
+# create new binary status variable
+#IN$status=as.numeric(IN$vital_status == "Dead")
+IN$status=as.numeric(IN$death_days_to != "[Not Applicable]")
+table(IN$status)
+
+# remove missing data
+IN=IN[c(which(IN$time != "[Completed]")),]
+IN=IN[c(which(IN$time != "[Not Available]")),]
+
+# make sure time variable is numeric
+IN$time=as.numeric(IN$time)
+IN=IN[c(which(!is.na(IN$time))),]
+
+# also need to convert patient Id's to lower case, to match the lower case of the patient Id's when using the 'export cohort' function for specific mutations
+IN$bcr_patient_uuid=tolower(IN$bcr_patient_uuid)
+#dim(IN) # 3090
+head(IN); dim(IN)
+
+```
+  
+  
+- extract the mutation data - anyone with a TP53 mutation  
+```{r, eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
+
+# -----------------------------------------------------
+# TCGAbiolinks: Searching, downloading and visualizing mutation files
+# see https://bioconductor.org/packages/devel/bioc/vignettes/TCGAbiolinks/inst/doc/mutation.html#Mutation_data_MC3_file
+#QUERY <- GDCquery(
+#    project = c("TCGA-SKCM","TCGA-BRCA","TCGA-KIRC","TCGA-LUAD","TCGA-LUSC"), 
+#    data.category = "Simple Nucleotide Variation", 
+#    access = "open",
+#    data.type = "Masked Somatic Mutation", 
+#    workflow.type = "Aliquot Ensemble Somatic Variant Merging and Masking"
+#)
+#GDCdownload(QUERY)
+#maf <- GDCprepare(QUERY)
+
+# multiple datasets - this download kept failing
+# try a single dataset
+
+#QUERY <- GDCquery(
+#    project = "TCGA-SKCM", 
+#    data.category = "Simple Nucleotide Variation", 
+#    access = "open",
+#    data.type = "Masked Somatic Mutation", 
+#    workflow.type = "Aliquot Ensemble Somatic Variant Merging and Masking"
+#)
+#GDCdownload(QUERY)
+#maf <- GDCprepare(QUERY)
+# this worked, however this function downloads massive files that don't seem specific to mutations
+# -----------------------------------------------------
+
+# Alternative pathway to extract gene/mutation data - GenomicDataCommons package
+# Working with simple somatic mutations
+# see https://bioconductor.org/packages/release/bioc/vignettes/GenomicDataCommons/inst/doc/somatic_mutations.html
+# this webpage, while it works, is not great in that it has no notes on each step
+library(GenomicDataCommons)
+library(tibble)
+grep_fields('genes', 'symbol')
+tp53 = genes() |> 
+  GenomicDataCommons::filter(symbol=='TP53') |> 
+  results(size=10000) |> 
+  as_tibble()
+ssms() |> 
+    GenomicDataCommons::filter(
+      chromosome==paste0('chr',tp53$gene_chromosome[1]) &
+        start_position > tp53$gene_start[1] & 
+        end_position < tp53$gene_end[1]) |> 
+    GenomicDataCommons::count()
+ssms() |> 
+    GenomicDataCommons::filter(
+      consequence.transcript.gene.symbol %in% c('TP53')) |> 
+    GenomicDataCommons::count()
+library(VariantAnnotation)
+vars = ssms() |> 
+    GenomicDataCommons::filter(
+      consequence.transcript.gene.symbol %in% c('TP53')) |> 
+    GenomicDataCommons::results_all() |>
+    as_tibble()
+vr = VRanges(seqnames = vars$chromosome,
+             ranges = IRanges(start=vars$start_position, width=1),
+             ref = vars$reference_allele,
+             alt = vars$tumor_allele)
+ssm_occurrences() |> 
+    GenomicDataCommons::filter(
+      ssm.consequence.transcript.gene.symbol %in% c('TP53')) |>
+    GenomicDataCommons::count()
+var_samples = ssm_occurrences() |> 
+    GenomicDataCommons::filter(
+      ssm.consequence.transcript.gene.symbol %in% c('TP53')) |> 
+    GenomicDataCommons::expand(c('case', 'ssm', 'case.project')) |>
+    GenomicDataCommons::results_all() |> 
+    as_tibble()
+
+# lets have a look at the data that was extracted
+ls(var_samples)
+head(var_samples$case)
+head(var_samples$id)
+head(var_samples$ssm)
+head(var_samples$ssm_occurrence_id)
+# checked the range of genomic positions in var_samples$ssm and they are all TP53
+# var_samples$case also has primary site and project if need to cross reference
+
+```
+
+
+- process the mutation data
+```{r, eval=TRUE, include=TRUE}
+OUT=var_samples$case
+OUT=OUT[,c("case_id","primary_site")]
+OUT$TP53=1
+# there are some duplicates in this dataframe to be removed, e.g.
+#> var_samples$case[c(which(var_samples$case$case_id == "63d646e2-60aa-4bd5-b2ed-6254c9c51be4")),]
+#                                       primary_site            disease_type available_variation_data                              case_id project.primary_site project.disease_type project.project_id                          project.name
+#12de3c3e-89e9-5573-9de5-51f1a9c3a623 Floor of mouth Squamous Cell Neoplasms                 cnv, ssm 63d646e2-60aa-4bd5-b2ed-6254c9c51be4         Tonsil, ....         Squamous....          TCGA-HNSC Head and Neck Squamous Cell Carcinoma
+#7d4aaa9c-e501-5415-b063-86be2608a768 Floor of mouth Squamous Cell Neoplasms                 cnv, ssm 63d646e2-60aa-4bd5-b2ed-6254c9c51be4         Tonsil, ....         Squamous....          TCGA-HNSC Head and Neck Squamous Cell Carcinoma
+#                                     project.dbgap_accession_number submitter_id index_date    state     consent_type lost_to_followup days_to_consent
+#12de3c3e-89e9-5573-9de5-51f1a9c3a623                           <NA> TCGA-QK-A6VB  Diagnosis released Informed Consent               No             -12
+#7d4aaa9c-e501-5415-b063-86be2608a768                           <NA> TCGA-QK-A6VB  Diagnosis released Informed Consent               No             -12
+
+OUT=OUT[c(which(!duplicated(OUT$case_id))),]
+
+# can now merge with the data extracted above
+INm=merge(IN,OUT,by.x="bcr_patient_uuid",by.y="case_id",all=TRUE)
+INm=INm[c(which(!is.na(INm$status))),]
+INm$TP53[c(which(is.na(INm$TP53)))]=0
+table(INm$TP53) # 1053 with a TP53 mutation
+dim(INm) # 3090 individuals
+# The numbers on the GDC are 3194 individuals and 1097 with a TP53 mutation
+
+```
+
+
+- run the survival analysis
+```{r, eval=TRUE, include=TRUE, message=FALSE, warning=FALSE}
+# now we can run the survival analysis
+library(ggsurvfit)
+#dev.new(height=4, width=4)
+survfit2(Surv(time, status) ~ TP53, data = INm) %>% 
+  ggsurvfit() +
+  labs(
+    x = "Days",
+    y = "Overall survival probability"
+)
+
+# put the x-axis in years
+# Since there are approximately 365.25 days in a year (accounting for leap years), divide the x-axis values by 365.25
+survfit2(Surv(time, status) ~ TP53, data = INm) %>% 
+  ggsurvfit() +
+  labs(
+    x = "Years",
+    y = "Overall survival probability"
+  ) +
+  scale_x_continuous(
+    breaks = seq(0, max(INm$time, na.rm = TRUE), by = 5 * 365.25), 
+    labels = scales::number_format(scale = 1/365.25, accuracy = 1)
+  )
+
+# any difference in males vs females?
+library(ggsurvfit)
+#dev.new(height=4, width=4)
+survfit2(Surv(time, status) ~ gender, data = INm) %>% 
+  ggsurvfit() +
+  labs(
+    x = "Days",
+    y = "Overall survival probability"
+)
+
+# switching to coxph for multivariable model - this tells us if the survival differences between groups are statistically significant or not
+library(survival)
+cox <- coxph(Surv(time, status) ~ TP53, data = INm); summary(cox)
+cox <- coxph(Surv(time, status) ~ TP53 + as.factor(gender), data = INm); summary(cox)
+
+```
+  
+
+- follow-up notes
+  - When you choose a gene in the GDC Portal, this includes any mutation related to that gene. You can look at the effect of specific mutations on survival if there is enough data. This is mainly related to whether there are a sufficient number of individuals with that mutation in both outcomes (died, alive, other factors if included)
+
+```{r, eval=FALSE, include=FALSE}
+
+```
+
+
