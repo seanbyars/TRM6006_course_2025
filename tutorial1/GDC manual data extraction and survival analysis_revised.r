@@ -1,5 +1,7 @@
-
-
+# revised version
+	# the names of the clinical.tsv and follow_up.tsv were not correct (see revised details below)
+	# I've also removed adding the 'days_to_follow_up' variable as we do not need it, we just need 'days_to_death' and 'days_to_last_follow_up' from the clinical.tsv file
+	# looks like we only need the 'clinical.tsv' file to run the basic survival analysis
 
 #### GDC - manual extraction of data for survival analysis in R    
 # - https://portal.gdc.cancer.gov/
@@ -17,14 +19,14 @@
 #     - click on the 7,625 CASES button > Clinical tab > TSV
 #       - this will download the data as a Zip file - place it somewhere on your laptop where its easy to point to in R. Below I've placed it in a folder called GDCdata on my desktop
 
-# 1. read in the follow_up.tsv file
-F = read.delim("~/Downloads/clinical.cohort.2025-03-25/follow_up.tsv", sep = "\t", header = TRUE, fill = TRUE)
+# read in the follow_up.tsv file - we don't actually need this
+# F = read.delim("~/Downloads/clinical.cohort.2025-03-25/follow_up.tsv", sep = "\t", header = TRUE, fill = TRUE)
 
-# 2. read in the clinical.tsv file
+# 1. read in the clinical.tsv file
 C = read.delim("~/Downloads/clinical.cohort.2025-03-25/clinical.tsv", sep = "\t", header = TRUE, fill = TRUE)
 
 
-# 3. extract days to death data from the clinical data file
+# 2. extract days to death data from the clinical data file
 # Cdtd=C[,c("case_id","days_to_death")] # previously I had thes two columns named like this ("case_id","days_to_death"), but in the download they may be named like this ("cases.case_id","demographic.days_to_death")
 Cdtd=C[,c("cases.case_id","demographic.days_to_death")]
 names(Cdtd)=c("case_id","days_to_death")
@@ -36,7 +38,7 @@ dim(Cdtd)
 hist(as.numeric(Cdtd$days_to_death),breaks=100) # lets look at a histogram of days until death
 
 
-# 4. now extract days to last follow-up from the clinical data file
+# 3. now extract days to last follow-up from the clinical data file
 # this will be used to code follow-up time for individuals who were still alive at the end of the observed follow-up
 #Cfu=C[,c("case_id","days_to_last_follow_up")] # just extract the variables that we need
 Cfu=C[,c("cases.case_id","diagnoses.days_to_last_follow_up")] # just extract the variables that we need
@@ -46,13 +48,14 @@ dim(Cfu)
 head(Cfu)
 Cfu=Cfu[c(which(!duplicated(Cfu$days_to_last_follow_up))),] # this file includes alot of duplicates to help 'pad' for other variables that may have more than one level recorded for one patient, i.e. they will have multiple rows which cause duplicates to appear for this variable that need to be removed. 
 
-# 5. now we can merge the death and follow-up variables together, using the case Id as the merge variable
+# 4. now we can merge the death and follow-up variables together, using the case Id as the merge variable
 M=merge(Cdtd,Cfu,by="case_id",all=TRUE)
 
 # because we have 2 columns of data, will write a loop to pull out 'time' (time to death or last followup) and 'status' (dead/alive at that time)
 # this loop will first identify those that have died...
 # ...then if the individual did not die, look in the days_to_last_follow_up column for a day value
 
+# 5. create the time (time to event or last follow-up) and status (binary, yes=event, no=no event) variables
 M$time=NA
 M$status=0
 for(i in 1:nrow(M)) {
@@ -74,14 +77,13 @@ length(which(is.na(M$time))) # checking if there are any NA values in the time c
 #    - click on Clinical > TSV to download
 #    - now we will read this NOTCH1 subset in, process and merge it into our dataset
 
-
+# 6. extracting and adding the mutation data
 NOTCH1 = read.delim("~/Downloads/clinical.cohort.2025-03-25(1)/clinical.tsv", sep = "\t", header = TRUE, fill = TRUE)
 NOTCH1$mutant=1 # indicator
 NOTCH1=NOTCH1[,c("cases.case_id","mutant")] # too many columns, lets just pull out the Id and NOTCH1 indicator
 names(NOTCH1)[1]="case_id"
 NOTCH1=NOTCH1[c(which(!duplicated(NOTCH1$case_id))),]
 dim(NOTCH1) # n=181, this should be the same number of individuals with the mutation shown on the GDC portal
-
 # now merge this in with the follow-up data
 dim(M); M=merge(M,NOTCH1,by="case_id",all=TRUE); dim(M)
 # there were slightly more (n=4) after the merge - this means we have 4 individuals with missing followup data
@@ -92,8 +94,7 @@ M$time=as.numeric(M$time)
 M[1:30,]
 
 
-#  - now we are ready to run the survival analysis
-  
+# 7. now we are ready to run the survival analysis
 library(ggsurvfit)
 #dev.new(height=4, width=4)
 survfit2(Surv(time, status) ~ mutant, data = M) %>% 
