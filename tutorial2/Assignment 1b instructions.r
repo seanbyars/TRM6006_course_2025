@@ -4,7 +4,7 @@
 # DEMO DATA & CODE
 # the example below provides an R code walkthrough single cell analysis with the Lupus data (2 x Lupus vs 2 x control samples) from the Friday tutorial
 # This starts with loading an single cell Rds file into R, then performs some standard single cell processing (e.g. QC filtering, normalisation) and analysis (cluster biomarker analysis, DGE analysis)
-# If you would like to download this data and run through each step below on your laptop, the data is available at https://tinyurl.com/5y9buyce
+# If you would like to download this data and run through each step below on your laptop, the data is available at https://tinyurl.com/5y9buyce and will download a file called 'tutorial_example_seurat_combined.Rds'
 
 
 # DATA TO USE FOR YOUR ASSIGNMENT
