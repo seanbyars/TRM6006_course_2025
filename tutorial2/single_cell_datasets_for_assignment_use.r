@@ -9,7 +9,7 @@ original GEO source: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE13577
 	GSM4029933 	cSLE31 [JB18080] - https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM4029933
 
 # you can download the Rds data here with these four samples - this data has predicted cell types included
-https://bioinformatics.erc.monash.edu/~sbya0003/tmp/TRM5006_6006_2025/tutorial2/single_cell_datasets_for_use/study1_seurat_combined.Rds
+https://tinyurl.com/4fabwrbj
 
 # read in the data in with LoadSeuratRds
 seurat_combined = LoadSeuratRds("study1_seurat_combined.Rds") # 24037 cells across 4 samples, two main groups (Lupus vs control)
@@ -23,7 +23,7 @@ original source 1: https://cellxgene.cziscience.com/collections/4f889ffc-d4bc-47
 original source 2: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE149689
 
 # you can download the Rds data here, I've selected a reduced dataset of COVID-19 vs normal samples - this data has predicted cell types included
-https://bioinformatics.erc.monash.edu/~sbya0003/tmp/TRM5006_6006_2025/tutorial2/single_cell_datasets_for_use/study2_seurat_combined.Rds
+https://tinyurl.com/5a6fja4n
 
 # read in the data in with LoadSeuratRds
 seurat_combined = LoadSeuratRds("study2_seurat_combined.Rds") # 49053 cells across 15 samples, two main groups (COVID-19 vs normal)
@@ -39,7 +39,7 @@ Original sources:
 	https://portal.sds.ox.ac.uk/articles/dataset/TARGET-seq_genotyping_data/23576421?file=43521585
 
 # you can download the Rds data here - this data has predicted cell types included
-https://bioinformatics.erc.monash.edu/~sbya0003/tmp/TRM5006_6006_2025/tutorial2/single_cell_datasets_for_use/study3_seurat_combined.Rds
+https://tinyurl.com/4yp3dpuc
 
 # read in the data in with LoadSeuratRds
 seurat_combined = LoadSeuratRds("study3_seurat_combined.Rds") # 13939 cells across 13 samples, two main groups (CH=clonal hematopoiesis vs contols)
@@ -52,7 +52,7 @@ Paper: https://pubmed.ncbi.nlm.nih.gov/34447367/
 original GEO source: https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE181279
 
 # you can download the Rds data here - this data has predicted cell types included
-https://bioinformatics.erc.monash.edu/~sbya0003/tmp/TRM5006_6006_2025/tutorial2/single_cell_datasets_for_use/study4_seurat_combined.Rds
+https://tinyurl.com/3m7s3fyk
 
 # read in the data in with LoadSeuratRds
 seurat_combined = LoadSeuratRds("study4_seurat_combined.Rds") # 36849 cells across 5 samples, two main groups (Alzheimers vs control)
