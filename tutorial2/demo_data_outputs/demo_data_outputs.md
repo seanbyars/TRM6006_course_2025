@@ -1,3 +1,3 @@
 - This provides an example of the main outputs required from your single cell analysis.
-- Once you generate these using your chosen single cell dataset (e.g. four available, see 'single_cell_datasets_for_assignment_use.r'), these can go in your report.
-- these were generated using the demo dataset 'tutorial_example_seurat_combined.Rds' and the R code in 'Assignment 1b instructions.r'
+- Once you generate these outputs using your chosen single cell dataset (e.g. four available, see 'single_cell_datasets_for_assignment_use.r'), these can go in your report.
+- these outputs were generated using the demo dataset 'tutorial_example_seurat_combined.Rds' and the R code in 'Assignment 1b instructions.r'
