@@ -277,7 +277,7 @@ FeaturePlot(seurat_combined, reduction = "umap", features = c("LGALS1"), split.b
 
 # just checking the expression of these two genes in all other cell types that we tested
 # IFI44L also shows differences between cases vs controls for other cell types
-OUT[c(which(OUT$gene == "IFI44L")),]
+DGE_analysis_case_vs_control_NK[c(which(DGE_analysis_case_vs_control_NK$gene == "IFI44L"))] # OUT[c(which(OUT$gene == "IFI44L")),]
 #                p_val avg_log2FC pct.1 pct.2     p_val_adj cluster   gene
 #IFI44L   0.000000e+00   4.173040 0.492 0.060  0.000000e+00       B IFI44L
 #IFI44L1  0.000000e+00   3.604638 0.401 0.074  0.000000e+00   CD4 T IFI44L
@@ -288,7 +288,7 @@ OUT[c(which(OUT$gene == "IFI44L")),]
 #IFI44L6  6.004627e-02   1.402663 0.208 0.108  1.000000e+00   other IFI44L
 #IFI44L7  3.738435e-26   3.320008 0.289 0.063  1.223889e-21 other T IFI44L
 
-OUT[c(which(OUT$gene == "LGALS1")),]
+DGE_analysis_case_vs_control_NK[c(which(DGE_analysis_case_vs_control_NK$gene == "LGALS1"))] # OUT[c(which(OUT$gene == "LGALS1")),]
 #                p_val avg_log2FC pct.1 pct.2     p_val_adj cluster   gene
 #LGALS1  1.510542e-108  1.9096663 0.398 0.150 4.945214e-104       B LGALS1
 #LGALS11  1.462926e-97  1.3487108 0.306 0.172  4.789328e-93   CD4 T LGALS1
